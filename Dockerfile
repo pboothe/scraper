@@ -15,4 +15,9 @@ RUN chmod +x run_scraper.py
 # RUN chmod +x check-health.sh
 # HEALTHCHECK CMD ./check-health.sh || exit 1
 # All daemons must be started here, along with the job they support.
-CMD /run_scraper.py --rsync_host=$RSYNC_HOST --rsync_module=$RSYNC_MODULE --data_dir=scraper_data --spreadsheet=143pU25GJidW2KZ_93hgzHdqTqq22wgdxR_3tt3dvrJY
+CMD /run_scraper.py \
+    --rsync_host=$RSYNC_HOST \
+    --rsync_module=$RSYNC_MODULE \
+    --bucket=$GCS_BUCKET \
+    --data_dir=scraper_data \
+    --spreadsheet=143pU25GJidW2KZ_93hgzHdqTqq22wgdxR_3tt3dvrJY
