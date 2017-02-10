@@ -20,4 +20,4 @@ CMD /run_scraper.py \
     --rsync_module=$RSYNC_MODULE \
     --bucket=$GCS_BUCKET \
     --data_dir=scraper_data \
-    --spreadsheet=143pU25GJidW2KZ_93hgzHdqTqq22wgdxR_3tt3dvrJY
+    --spreadsheet=$SPREADSHEET
