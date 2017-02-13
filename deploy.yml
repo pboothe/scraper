@@ -10,6 +10,8 @@ spec:
   replicas: 1
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
       name: {site}-{node}-{experiment}-{rsync_module}
       labels:
         app: {site}-{node}-{experiment}-{rsync_module}
