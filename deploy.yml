@@ -12,6 +12,7 @@ spec:
     metadata:
       annotations:
         prometheus.io/scrape: 'true'
+        prometheus.io/port: '9090'
       name: {site}-{node}-{experiment}-{rsync_module}
       labels:
         app: {site}-{node}-{experiment}-{rsync_module}
@@ -31,5 +32,5 @@ spec:
               value: mlab-scraper-staging
           resources:
             requests:
-              memory: "10Mi"
-              cpu: "10m"
+              memory: "20Mi"
+              cpu: "20m"
