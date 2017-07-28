@@ -40,7 +40,6 @@ gzdiff ()
       if [[ $lines != 0 ]]
       then
         echo FILES DIFFER: ${filename}
-        exit 1
       fi
     else
       if ! zdiff -q ${oldfile} ${newfile}
