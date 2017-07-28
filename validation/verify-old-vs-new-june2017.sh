@@ -68,7 +68,8 @@ do
       done
     popd
     pushd $new
-      gsutil -m cp gs://archive-mlab-oti/${EXPERIMENT}/2017/06/${day}/*${sliver}*.tgz . || gsutil -m cp gs://scraper-mlab-oti/${EXPERIMENT}/2017/06/${day}/*${sliver}*.tgz .
+      gsutil -m cp gs://archive-mlab-oti/${EXPERIMENT}/2017/06/${day}/*${sliver}*.tgz . \
+        || gsutil -m cp gs://scraper-mlab-oti/${EXPERIMENT}/2017/06/${day}/*${sliver}*.tgz .
       for tgz in *.tgz
       do
         tar xfz ${tgz}
