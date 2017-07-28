@@ -21,6 +21,7 @@ gzdiff ()
   olddir=$1
   newdir=$2
   filename=$3
+  experiment=$4
   oldfile=${olddir}/${filename}
   if [[ -e ${oldfile}.gz ]]
   then
@@ -33,9 +34,19 @@ gzdiff ()
   fi
   if [[ -f ${oldfile} && -f ${newfile} ]]
   then
-    if ! zdiff -q ${oldfile} ${newfile}
+    if [[ ${experiment} == "sidestream" ]]
     then
-      echo FILES DIFFER: ${filename}
+      lines=$(comm -2 -3 <(sort ${oldfile})  <(sort ${newfile}) | wc -l)
+      if [[ $lines != 0 ]]
+      then
+        echo FILES DIFFER: ${filename}
+        exit 1
+      fi
+    else
+      if ! zdiff -q ${oldfile} ${newfile}
+      then
+        echo FILES DIFFER: ${filename}
+      fi
     fi
   fi
 }
@@ -43,7 +54,7 @@ gzdiff ()
 for day in $(seq -w 1 30)
 do
   echo $day
-  slivers=$(gsutil ls gs://m-lab/ndt/2017/06/${day} | sed -e 's/^.*Z-//' -e 's/-[0-9]*.tgz//' |  sort -u)
+  slivers=$(gsutil ls gs://m-lab/${EXPERIMENT}/2017/06/${day} | sed -e 's/^.*Z-//' -e 's/-[0-9]*.tgz//' |  sort -u)
   for sliver in $(echo $slivers)
   do
     old=$(mktemp -d ./olddata.tmp.XXXXXX)
@@ -58,7 +69,7 @@ do
       done
     popd
     pushd $new
-      gsutil -m cp gs://archive-mlab-oti/${EXPERIMENT}/2017/06/${day}/*${sliver}*.tgz .
+      gsutil -m cp gs://archive-mlab-oti/${EXPERIMENT}/2017/06/${day}/*${sliver}*.tgz . || gsutil -m cp gs://scraper-mlab-oti/${EXPERIMENT}/2017/06/${day}/*${sliver}*.tgz .
       for tgz in *.tgz
       do
         tar xfz ${tgz}
@@ -79,7 +90,7 @@ do
     # Print out files that are in both dirs (neglecting the .gz suffix) and
     # then gzdiff them.
     comm -1 -2 ${old}/filelist.txt <(cat ${new}/filelist.txt | sed -e 's/.gz$//' | sort -u) \
-      | grep -v filelist.txt | while read; do gzdiff $old $new ${REPLY}; done
+      | grep -v filelist.txt | while read; do gzdiff $old $new ${REPLY} ${EXPERIMENT}; done
     echo checked that all files have the same contents for $day $sliver
     rm -Rf ${old} ${new}
   done
