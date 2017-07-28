@@ -26,6 +26,7 @@ gzdiff ()
   if [[ -f ${oldfile} && -f ${newfile} ]]
   then
     if ! zdiff -q ${oldfile} ${newfile}
+    then
       echo FILES DIFFER: ${filename}
     fi
   fi
