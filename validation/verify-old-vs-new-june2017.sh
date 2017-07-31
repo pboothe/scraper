@@ -23,12 +23,8 @@ gzdiff ()
   filename=$3
   experiment=$4
   oldfile=${olddir}/${filename}
-  if [[ -e ${oldfile}.gz ]]
-  then
-    oldfile=${oldfile}.gz
-  fi
   newfile=${newdir}/${filename}
-  if [[ -e ${newfile}.gz ]]
+  if [[ -e ${newfile}.gz ]] && [[ ! -e ${newfile} ]]
   then
     newfile=${newfile}.gz
   fi
@@ -44,7 +40,15 @@ gzdiff ()
     else
       if ! zdiff -q ${oldfile} ${newfile}
       then
-        echo FILES DIFFER: ${filename}
+        if [[ -e ${newfile}.gz ]]
+        then
+          if ! zdiff -q ${oldfile} ${newfile}.gz
+	  then
+            echo FILES DIFFER: ${filename}
+          fi
+        else
+          echo FILES DIFFER: ${filename}
+        fi
       fi
     fi
   fi
