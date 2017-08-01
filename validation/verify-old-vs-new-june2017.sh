@@ -47,11 +47,15 @@ gzdiff ()
       then
         if ! zdiff -q ${oldfile} ${newfile}.gz
         then
-          # The zipped and unzipped new files both differ from the old file
+          # The zipped and unzipped new files both differ from the old file,
+          # therefore the data actually differs.
           echo FILES DIFFER: ${filename}
         fi
       else
-        # No .gz file exists and the raw new file differs from the old
+        # The newfile and oldfile differ, and appending .gz to the newfile
+        # doesn't produce the name of an existing file that might match despite
+        # the newfile and oldfile differing. Therefore, the data actually
+        # differs.
         echo FILES DIFFER: ${filename}
       fi
     fi
